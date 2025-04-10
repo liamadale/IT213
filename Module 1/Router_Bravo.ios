@@ -1,0 +1,5 @@
+! BASIC CONFIGURATION
+no ip domain-lookup  
+hostname Router_Bravo 
+service password-encryption  
+banner motd #No unauthorized access!#

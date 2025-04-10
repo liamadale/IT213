@@ -1,0 +1,5 @@
+! BASIC CONFIGURATION
+no ip domain-lookup  
+hostname Router_Alpha
+service password-encryption  
+banner motd #No unauthorized access!#

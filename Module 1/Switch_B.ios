@@ -1,0 +1,58 @@
+! BASIC CONFIGURATION
+no ip domain-lookup  
+hostname Switch_B
+service password-encryption  
+banner motd #No unauthorized access!#
+
+! PASSSWORD CONFIGURATION
+enable secret Enable123
+line con 0
+logging synchronous
+password Access123
+login
+exit
+
+! VLAN CONFIGURATION
+vlan 20
+name Blue
+int vlan 20
+description Blue
+vlan 40
+name Pink
+int vlan 40
+description Pink
+vlan 60
+name Purple
+int vlan 60
+description Purple
+
+! ACCESS PORTS & TRUNKING PORTS CONFIGURATION
+int range fa0/2-3
+switchport mode access
+switchport mode access vlan 60
+
+! LINK-AGGREGATION CONFIGURATION
+int range fa0/23-24
+channel-group 1 mode active
+
+int port-channel 1
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 20,40,60
+switchport trunk native vlan 42
+
+! PORT SECURITY CONFIGURATION
+int range fa0/2-3
+switchport port-security maximum 2
+switchport port-security violation restrict
+no shut
+
+int range fa0/23-24
+switchport port-security maximum 2
+switchport port-security violation restrict
+no shut
+
+! SHUTDOWN PORTS CONFIGURATION
+int range fa0/1,fa0/4-22
+description Unused
+shutdown
