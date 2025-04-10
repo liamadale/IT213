@@ -28,7 +28,6 @@ description Purple
 
 ! ACCESS PORTS & TRUNKING PORTS CONFIGURATION
 int range fa0/2-3
-switchport mode access
 switchport mode access vlan 60
 
 ! LINK-AGGREGATION CONFIGURATION

@@ -3,3 +3,28 @@ no ip domain-lookup
 hostname Router_Alpha
 service password-encryption  
 banner motd #No unauthorized access!#
+
+! PASSSWORD CONFIGURATION
+enable secret Enable123
+line con 0
+logging synchronous
+password Access123
+login
+exit
+
+! IP ASSIGNMENT CONFIGURATION
+int g0/0
+ip add 10.10.0.1 255.255.255.252
+
+int lo1
+ip add 8.8.8.1 255.255.255.252
+
+! TODO:
+! STATIC ROUTING CONFIGURATION
+! For 10.10.0.1 → 8.8.8.1
+! For 10.10.0.1 → 10.10.0.2 
+! NTP MASTER CONFIGURATION
+! Router_Bravo: ntp master 1
+! CDP AND LLDP CONFIGURATION
+! Router_Bravo: cdp run
+! Router_Bravo: lldp run

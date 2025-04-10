@@ -27,9 +27,11 @@ int vlan 60
 description Purple
 
 ! ACCESS PORTS & TRUNKING PORTS CONFIGURATION
-int range fa0/2-3
-switchport mode access
-switchport mode access vlan 60
+int fa0/2
+switchport mode access vlan 40
+
+int fa0/12
+switchport mode access vlan 20
 
 ! LINK-AGGREGATION CONFIGURATION
 int range fa0/23-24
@@ -42,7 +44,7 @@ switchport trunk allowed vlan 20,40,60
 switchport trunk native vlan 42
 
 ! PORT SECURITY CONFIGURATION
-int range fa0/2-3
+int range fa0/2,fa0/12
 switchport port-security maximum 2
 switchport port-security violation restrict
 no shut
