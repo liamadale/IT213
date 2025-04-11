@@ -38,3 +38,38 @@ int g0/1.60
 description "VLAN PURPLE"
 encap dot1q 60
 ip add 192.168.60.1 255.255.255.0
+
+! STATIC ROUTING CONFIGURATION
+! For 10.10.0.2 → 8.8.8.0
+ip route 0.0.0.0 0.0.0.0 10.10.0.1
+
+
+! NTP SERVER CONFIGURATION
+ntp server 10.10.0.1
+
+! CDP AND LLDP CONFIGURATION
+cdp run
+lldp run
+
+! DHCP CONFIGURATION
+ip dhcp excluded-address 192.168.20.1 192.168.20.2
+ip dhcp pool VLAN-20-IP-Pool
+network 192.168.20.1 255.255.255.255
+default-router 192.168.20.1
+dns-server 8.8.8.1
+domain-name cisco.com
+
+! SSH CONFIGURATION
+ip domain-name cisco.com
+
+ip ssh version 2
+
+username Cisco priv 15 secret Cisco123
+
+crypto key generate rsa general-keys modulus 2048
+
+line vty 0 15
+transport input ssh
+login local
+exec-timeout 10 0
+exit

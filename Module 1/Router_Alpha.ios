@@ -19,12 +19,19 @@ ip add 10.10.0.1 255.255.255.252
 int lo1
 ip add 8.8.8.1 255.255.255.252
 
-! TODO:
 ! STATIC ROUTING CONFIGURATION
-! For 10.10.0.1 → 8.8.8.1
-! For 10.10.0.1 → 10.10.0.2 
+! For 10.10.0.1 → 8.8.8.0
+ip route 0.0.0.0 0.0.0.0 Lo1
+! For 10.10.0.1 → 192.168.20.0
+ip route 192.168.20.0 255.255.255.0 10.10.0.2
+! For 10.10.0.1 → 192.168.40.0 
+ip route 192.168.40.0 255.255.255.0 10.10.0.2
+! For 10.10.0.1 → 192.168.60.0
+ip route 192.168.60.0 255.255.255.0 10.10.0.2
+
 ! NTP MASTER CONFIGURATION
-! Router_Bravo: ntp master 1
+ntp master 1
+
 ! CDP AND LLDP CONFIGURATION
-! Router_Bravo: cdp run
-! Router_Bravo: lldp run
+cdp run
+lldp run

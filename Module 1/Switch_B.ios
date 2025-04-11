@@ -58,3 +58,7 @@ no shut
 int range fa0/1,fa0/4-22
 description Unused
 shutdown
+
+! CDP AND LLDP CONFIGURATION
+cdp run
+lldp run
