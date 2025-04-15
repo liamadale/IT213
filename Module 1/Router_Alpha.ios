@@ -15,9 +15,11 @@ exit
 ! IP ASSIGNMENT CONFIGURATION
 int g0/0
 ip add 10.10.0.1 255.255.255.252
+no shut
 
 int lo1
 ip add 8.8.8.1 255.255.255.252
+no shut
 
 ! STATIC ROUTING CONFIGURATION
 ! For 10.10.0.1 → 8.8.8.0

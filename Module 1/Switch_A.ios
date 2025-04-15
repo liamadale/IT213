@@ -28,10 +28,20 @@ description Purple
 
 ! ACCESS PORTS & TRUNKING PORTS CONFIGURATION
 int range fa0/2-3
-switchport mode access vlan 60
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security maximum 2
+switchport port-security violation protect
+switchport mode access
+switchport access vlan 60
+no shut
 
 ! LINK-AGGREGATION CONFIGURATION
 int range fa0/23-24
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 20,40,60
+switchport trunk native vlan 42
 channel-group 1 mode active
 
 int port-channel 1
@@ -41,14 +51,9 @@ switchport trunk allowed vlan 20,40,60
 switchport trunk native vlan 42
 
 ! PORT SECURITY CONFIGURATION
-int range fa0/2-3
-switchport port-security maximum 2
-switchport port-security violation restrict
-no shut
-
 int range fa0/23-24
 switchport port-security maximum 2
-switchport port-security violation restrict
+switchport port-security violation protect
 no shut
 
 ! SHUTDOWN PORTS CONFIGURATION
@@ -59,3 +64,9 @@ shutdown
 ! CDP AND LLDP CONFIGURATION
 cdp run
 lldp run
+
+int fa0/2
+switchport port-security
+
+int fa0/3
+switchport port-security

@@ -23,11 +23,16 @@ exit
 ! IP ASSIGNMENT CONFIGURATION
 int g0/0
 ip add 10.10.0.2 255.255.255.252
+no shut
+
+int g0/1
+no shut
 
 int g0/1.20
 description "VLAN BLUE"
 encap dot1q 20
 ip add 192.168.20.1 255.255.255.0
+
 
 int g0/1.40
 description "VLAN PINK"
@@ -54,7 +59,7 @@ lldp run
 ! DHCP CONFIGURATION
 ip dhcp excluded-address 192.168.20.1 192.168.20.2
 ip dhcp pool VLAN-20-IP-Pool
-network 192.168.20.1 255.255.255.255
+network 192.168.20.1 255.255.255.0
 default-router 192.168.20.1
 dns-server 8.8.8.1
 domain-name cisco.com
