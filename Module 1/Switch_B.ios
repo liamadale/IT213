@@ -26,7 +26,7 @@ name Purple
 int vlan 60
 description Purple
 
-! ACCESS PORTS & TRUNKING PORTS CONFIGURATION
+! ACCESS PORTS, TRUNKING PORTS CONFIGURATION & PORT SECURITY
 int fa0/2
 switchport mode access
 switchport access vlan 40
@@ -39,6 +39,24 @@ no shut
 int fa0/12
 switchport mode access
 switchport access vlan 20
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security maximum 2
+switchport port-security violation protect
+no shut
+
+int fa0/1
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 20,40,60
+switchport trunk native vlan 42
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security maximum 2
+switchport port-security violation protect
+no shut
+
+int range fa0/23-24
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security maximum 2
@@ -59,25 +77,6 @@ switchport mode trunk
 switchport nonegotiate
 switchport trunk allowed vlan 20,40,60
 switchport trunk native vlan 42
-no shut
-
-! PORT SECURITY CONFIGURATION
-int fa0/1
-switchport mode trunk
-switchport nonegotiate
-switchport trunk allowed vlan 20,40,60
-switchport trunk native vlan 42
-switchport port-security
-switchport port-security mac-address sticky
-switchport port-security maximum 2
-switchport port-security violation protect
-no shut
-
-int range fa0/23-24
-switchport port-security
-switchport port-security mac-address sticky
-switchport port-security maximum 2
-switchport port-security violation protect
 no shut
 
 ! SHUTDOWN PORTS CONFIGURATION
