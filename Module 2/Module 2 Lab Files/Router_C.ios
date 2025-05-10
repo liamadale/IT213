@@ -1,0 +1,42 @@
+! Basic configuration ---
+
+no ip domain-lookup
+hostname Router_C
+service password-encryption
+banner motd #No unauthorized access!#
+
+! IP address configuration ---
+
+int g0/0
+    ip add 10.1.1.13 255.255.255.252
+    ip ospf hello-interval 5
+    ip ospf dead-interval 20
+    no shut
+
+int g0/1
+    ip add 192.168.10.1 255.255.255.0
+    ip ospf hello-interval 5
+    ip ospf dead-interval 20
+    no shut
+
+int g0/2
+    ip add 10.1.1.10 255.255.255.252
+    ip ospf hello-interval 5
+    ip ospf dead-interval 20
+    no shut
+
+! OSPF configuration ---
+
+router ospf 1
+    router-id 1.1.1.1
+    auto-cost reference-bandwidth 10000
+
+    passive-interface Loopback0
+    passive-interface g0/1
+
+    ! int g0/0
+    network 10.1.1.12 0.0.0.3 area 0
+    ! int g0/1
+    network 192.168.10.0 0.0.0.255 area 0
+    ! int g0/2
+    network 10.1.1.8 0.0.0.3 area 0
