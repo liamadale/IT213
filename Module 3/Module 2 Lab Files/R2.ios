@@ -1,0 +1,67 @@
+! BASIC CONFIGURATION
+no ip domain-lookup  
+hostname R2
+service password-encryption  
+ip domain-name farm.local
+banner motd #No unauthorized access!#
+
+! SSH CONFIGURATION
+crypto key generate rsa
+2048
+
+username admin privilege 15 secret Admin123
+line vty 0 4
+transport input ssh
+login local
+exit
+
+ip ssh version 2
+
+! ACCESS CONTROL CONFIGURATION
+access-list 10 remark Allow Goat2 to reach the Horse network
+access-list 10 permit 192.168.100.11
+access-list 10 remark Deny all else
+access-list 10 deny any
+
+ip access-list standard SSH_ONLY_GOAT1
+    remark Allow SSH only from Goat1
+    permit 192.168.100.10
+    deny any
+
+line vty 0 4
+    access-class SSH_ONLY_GOAT1 in
+    exit
+    
+ip access-list extended ALLOW_GOAT1_HTTPS_AND_DENY_ALL
+    remark Allow Goat1 to Web1 via HTTPS
+    10 permit tcp host 192.168.100.10 host 10.10.200.20 eq 443
+    remark Deny all other HTTPS traffic
+    20 deny tcp any host 10.10.200.20 eq 443
+    30 permit ip any any
+
+! IP ASSIGNMENT CONFIGURATION
+int g0/0
+! Feed Lot
+ip add 10.10.200.1 255.255.255.0
+ip access-group ALLOW_GOAT1_HTTPS_AND_DENY_ALL in
+no shut
+
+int g0/1
+! Horse
+ip add 192.168.20.1 255.255.255.192
+ip access-group 10 in
+no shut
+
+int S0/0/0
+! P2P Link
+ip add 10.10.10.2 255.255.255.252
+no shut
+
+! R2#show ip int bri
+! Interface              IP-Address      OK? Method Status                Protocol 
+! GigabitEthernet0/0     10.10.200.1     YES manual up                    up 
+! GigabitEthernet0/1     192.168.20.1    YES manual up                    up 
+! Serial0/0/0            10.10.10.2      YES manual up                    up 
+! Serial0/0/1            unassigned      YES unset  administratively down down 
+! Loopback0              123.45.67.89    YES manual up                    up 
+! Vlan1                  unassigned      YES unset  administratively down down
