@@ -1,0 +1,21 @@
+! BASIC CONFIGURATION
+no ip domain-lookup  
+hostname Router-A
+service password-encryption  
+banner motd #No unauthorized access!#
+
+! PASSSWORD CONFIGURATION
+enable secret cisco123CISCO123!
+    line con 0
+    logging synchronous
+    password cisco123CISCO123!
+    login
+    exit
+
+! LINK-AGGREGATION CONFIGURATION
+int range g0/1-2
+    channel-group 1 mode active
+    no shut
+
+int port-channel 1
+    no shut

@@ -1,0 +1,33 @@
+! BASIC CONFIGURATION
+no ip domain-lookup  
+hostname L3Switch-B 
+service password-encryption  
+banner motd #No unauthorized access!#
+
+! PASSWORD CONFIGURATION
+enable secret cisco123CISCO123!
+line con 0
+    logging synchronous
+    password cisco123CISCO123!
+    login
+    exit
+
+! IP ASSIGNMENT CONFIGURATION
+
+int g1/0/1
+    ip add 10.5.5.3 255.255.255.248
+    no shut
+
+int g1/0/2
+    ip add 10.5.5.3 255.255.255.248
+    no shut
+
+! LINK-AGGREGATION CONFIGURATION
+
+int range g1/0/23-24
+    channel-group 1 mode active
+    no shut
+
+int port-channel 1
+    ip add 10.0.0.1
+    no shut
