@@ -13,6 +13,9 @@ line con 0
     exit
 
 ! IP ASSIGNMENT CONFIGURATION
+
+ip routing
+
 int g0/1
     ip add 10.5.5.4 255.255.255.248
     no shut
@@ -28,7 +31,6 @@ int g0/0.20
     description "VLAN BLUE CLASSROOM NET"
     encap dot1q 20
     ip add 10.10.20.1 255.255.255.0
-
 
 int g0/0.40
     description "VLAN PURPLE FACULTY NET"
@@ -53,7 +55,7 @@ ip dhcp excluded-address 10.10.40.1 10.10.40.24
 ip dhcp excluded-address 10.10.40.255
 
 ip dhcp pool VLAN-60-IP-Pool
-    network 10.10.60.1 255.255.255.0
+    network 10.10.60.0 255.255.255.0
     default-router 10.10.60.1
     dns-server 8.8.8.8
     domain-name cisco.com
@@ -72,17 +74,29 @@ ip dhcp excluded-address 10.10.40.201 10.10.40.254
 ip dhcp excluded-address 10.10.40.255
 
 ip dhcp pool VLAN-40-IP-Pool
-network 10.10.40.1 255.255.255.0
+network 10.10.40.0 255.255.255.0
     default-router 10.10.40.1
     dns-server 8.8.8.8
     domain-name cisco.com
 
 ! ACL CONFIGURATION
-
 ip access-list standard MANAGEMENT-ONLY
     permit 10.0.0.0 0.0.0.255
     deny any
+    exit
 
-line vty 0 4
-    access-class MANAGEMENT-ONLY in
+! SSH CONFIGURATION
+ip domain-name cisco.com
+
+ip ssh version 2
+
+username cisco priv 15 secret cisco123CISCO123!
+
+crypto key generate rsa general-keys modulus 2048
+
+line vty 0 15
     transport input ssh
+    access-class MANAGEMENT-ONLY in
+    login local
+    exec-timeout 10 0
+    exit

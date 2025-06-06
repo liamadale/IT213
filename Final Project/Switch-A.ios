@@ -1,6 +1,6 @@
 ! BASIC CONFIGURATION
 no ip domain-lookup  
-hostname Router-A
+hostname Switch-A
 service password-encryption  
 banner motd #No unauthorized access!#
 
@@ -25,6 +25,16 @@ vlan 60
 name Green
 int vlan 60
 description Green
+vlan 10
+name Orange
+int vlan 10
+description Orange
+
+int g0/1
+    switchport trunk encapsulation dot1q
+    switchport mode trunk
+    switchport trunk allowed vlan 10,20,40,60
+    no shut
 
 ! ACCESS PORTS, TRUNKING PORTS CONFIGURATION & PORT SECURITY
 int range fa0/1-2
