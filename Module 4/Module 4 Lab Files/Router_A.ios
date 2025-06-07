@@ -1,0 +1,44 @@
+no ip domain-lookup
+hostname Router_A
+service password-encryption
+banner motd #No unauthorized access!#
+
+! Sub-interfaces for inter-VLAN routing
+interface g0/1.20
+    encapsulation dot1Q 20
+    ip address 192.168.1.129 255.255.255.192
+
+interface g0/1.40
+    encapsulation dot1Q 40
+    ip address 192.168.1.1 255.255.255.128
+
+interface g0/1.60
+    encapsulation dot1Q 60
+    ip address 192.168.0.1 255.255.255.0
+
+! Enable NAT on the outside interface
+interface g0/0
+    ip address 209.165.202.1 255.255.255.248
+    ip nat outside
+    no shutdown
+
+! NAT inside interfaces
+interface g0/1
+    ip nat inside
+
+! Access lists
+access-list 20 permit 192.168.1.128 0.0.0.63
+access-list 40 permit 192.168.1.0 0.0.0.127
+access-list 60 permit host 192.168.0.254
+
+! Dynamic NAT for VLAN 20
+ip nat pool Dynamic-NAT-VLAN20 209.165.202.5 209.165.202.6 netmask 255.255.255.248
+ip nat inside source list 20 pool Dynamic-NAT-VLAN20
+
+! PAT (Dynamic Overload) for VLAN 40
+ip nat pool One-to-Many_PAT-VLAN40 209.165.202.6 209.165.202.7 netmask 255.255.255.248
+ip nat inside source list 40 pool One-to-Many_PAT-VLAN40 overload
+
+! Static PAT for VLAN 60 (1-to-1 port mapping)
+ip nat inside source static tcp 192.168.0.254 80 209.165.202.8 8080
+ip nat inside source list 60 interface g0/0 overload

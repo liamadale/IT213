@@ -1,0 +1,24 @@
+no ip domain-lookup
+hostname Router_B
+service password-encryption
+banner motd #No unauthorized access!#
+
+! Interface configuration
+interface g0/0
+    ip address 209.165.202.2 255.255.255.248
+    no shutdown
+
+interface g0/1
+    ip address 192.168.200.1 255.255.255.0
+    no shutdown
+
+! Static NAT for server
+ip nat inside source static 192.168.200.5 209.165.202.3
+
+! Lets ET phone home
+ip route 192.168.0.0 255.255.254.0 209.165.202.1
+
+interface g0/1
+    ip nat inside
+interface g0/0
+    ip nat outside
