@@ -18,6 +18,9 @@ ip routing
 
 int g0/1
     ip add 10.5.5.4 255.255.255.248
+    ip ospf 1 area 0
+    ip ospf hello-interval 5
+    ip ospf dead-interval 20
     no shut
 
 int g0/2
@@ -84,6 +87,15 @@ ip access-list standard MANAGEMENT-ONLY
     permit 10.0.0.0 0.0.0.255
     deny any
     exit
+
+! OSPF CONFIGURATION
+router ospf 1
+    router-id 5.5.5.5
+    default-information originate
+    auto-cost reference-bandwidth 10000
+
+    ! int g0/1
+    network 10.8.8.0 0.0.0.3 area 0
 
 ! SSH CONFIGURATION
 ip domain-name cisco.com

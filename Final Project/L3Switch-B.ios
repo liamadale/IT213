@@ -18,6 +18,9 @@ ip routing
 
 int g1/0/1
     ip add 10.5.5.3 255.255.255.248
+    ip ospf 1 area 0
+    ip ospf hello-interval 5
+    ip ospf dead-interval 20
     no shut
 
 int g1/0/2
@@ -48,6 +51,15 @@ ip access-list standard MANAGEMENT-ONLY
     permit 10.0.0.0 0.0.0.255
     deny any
     exit
+
+! OSPF CONFIGURATION
+router ospf 1
+    router-id 6.6.6.6
+    default-information originate
+    auto-cost reference-bandwidth 10000
+
+    ! int g0/1
+    network 10.8.8.0 0.0.0.3 area 0
 
 ! VLAN CONFIGURATION
 vlan 20
