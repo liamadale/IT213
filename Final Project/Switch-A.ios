@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ! BASIC CONFIGURATION
 no ip domain-lookup  
 hostname Switch-A
@@ -67,3 +68,58 @@ line vty 0 15
     login local
     exec-timeout 10 0
     exit
+=======
+! BASIC CONFIGURATION
+no ip domain-lookup  
+hostname Switch-A
+service password-encryption  
+banner motd #No unauthorized access!#
+
+! PASSSWORD CONFIGURATION
+enable secret cisco123CISCO123!
+line con 0
+    logging synchronous
+    password cisco123CISCO123!
+    login
+    exit
+
+! VLAN CONFIGURATION
+vlan 20
+name Blue
+int vlan 20
+description Blue
+vlan 40
+name Purple
+int vlan 40
+description Purple
+vlan 60
+name Green
+int vlan 60
+description Green
+vlan 10
+name Orange
+int vlan 10
+description Orange
+
+int g0/1
+    switchport trunk encapsulation dot1q
+    switchport mode trunk
+    switchport trunk allowed vlan 10,20,40,60
+    no shut
+
+! ACCESS PORTS, TRUNKING PORTS CONFIGURATION & PORT SECURITY
+int range fa0/1-2
+    switchport mode access
+    switchport access vlan 20
+    no shut
+
+int range fa0/3-4
+    switchport mode access
+    switchport access vlan 40
+    no shut
+
+int fa0/5
+    switchport mode access
+    switchport access vlan 60
+    no shut
+>>>>>>> 5689970f4910f22cfdee41314354c3f7dfd1a190
