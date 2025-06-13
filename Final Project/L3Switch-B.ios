@@ -16,21 +16,54 @@ line con 0
 
 ip routing
 
-int g1/0/1
-    ip add 10.5.5.3 255.255.255.248
-    ip ospf 1 area 0
-    ip ospf hello-interval 5
-    ip ospf dead-interval 20
-    no shut
+interface g1/0/1
+ description "To L3Switch-C2"
+ ip address 10.5.5.6 255.255.255.240
+ standby 1 ip 10.5.5.3
+ standby 1 priority 100
+ standby 1 preempt
+ ip ospf 1 area 0
+ no shut
 
-int g1/0/2
-    ip add 10.5.5.3 255.255.255.248
-    no shut
+interface g1/0/2
+ description "To L3Switch-C1"
+ ip address 10.5.5.7 255.255.255.240
+ ip ospf 1 area 0
+ no standby 1
+ no shut
+
+
+interface g1/0/3
+  description "Trunk to Access Switch"
+  switchport trunk encapsulation dot1q
+  switchport mode trunk
+  no shut
+
+interface g1/0/5
+  description "Trunk to Access Switch"
+  switchport trunk encapsulation dot1q
+  switchport mode trunk
+  no shut
 
 int vlan10
  description Management VLAN
  ip address 10.0.0.1 255.255.255.0
  no shutdown
+
+interface vlan20
+ description VLAN BLUE CLASSROOM NET
+ ip address 10.10.20.2 255.255.255.0
+ no shut
+
+interface vlan40
+ description VLAN PURPLE FACULTY NET
+ ip address 10.10.40.2 255.255.255.0
+ no shut
+
+interface vlan60
+ description VLAN GREEN STUDENT NET
+ ip address 10.10.60.2 255.255.255.0
+ no shut
 
 ! LINK-AGGREGATION CONFIGURATION
 int range g1/0/23 - 24
@@ -78,6 +111,27 @@ vlan 10
 name Orange
 int vlan 10
 description Orange
+
+interface vlan20
+ standby 20 ip 10.10.20.254
+ standby 20 priority 100
+ standby 20 preempt
+
+interface vlan40
+ standby 40 ip 10.10.40.254
+ standby 40 priority 100
+ standby 40 preempt
+
+interface vlan60
+ standby 60 ip 10.10.60.254
+ standby 60 priority 100
+ standby 60 preempt
+
+router ospf 1
+ network 10.0.0.0 0.0.0.255 area 0
+ network 10.10.20.0 0.0.0.255 area 0
+ network 10.10.40.0 0.0.0.255 area 0
+ network 10.10.60.0 0.0.0.255 area 0
 
 ! SSH CONFIGURATION
 ip domain-name cisco.com

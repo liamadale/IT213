@@ -12,12 +12,20 @@ enable secret cisco123CISCO123!
     login
     exit
 
+ip default-gateway 10.10.10.1
+
 ! LINK-AGGREGATION CONFIGURATION
 int range g0/1-2
     channel-group 1 mode active
     no shut
 
 int port-channel 1
+    switchport trunk encapsulation dot1q
+    switchport mode trunk
+    switchport trunk allowed vlan 10,20,40,60
+    no shut
+
+interface fa0/4
     switchport trunk encapsulation dot1q
     switchport mode trunk
     switchport trunk allowed vlan 10,20,40,60
